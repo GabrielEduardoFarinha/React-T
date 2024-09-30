@@ -5,6 +5,7 @@ import Login from './Login';
 import Home from './Home';
 import CalendarScreen from './CalendarScreen';
 import MapScreen from './MapScreen';
+import ClockScreen from './ClockScreen';
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,11 @@ const App = () => {
           component={MapScreen} 
           options={{ headerShown: true, title: 'Map' }} 
         />
+        <Stack.Screen 
+         name="Clock"
+         component={ClockScreen}
+          options={{ headerShown: true, title: 'Clock' }}
+          />
       </Stack.Navigator>
     </NavigationContainer>
   );
