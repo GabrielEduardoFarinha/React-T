@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
-import AssetExample from './components/AssetExample';
+import AssetExample from '../components/AssetExample';
 import { useNavigation } from '@react-navigation/native';
 
 const Login = () => {

@@ -4,11 +4,11 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 
 const data = [
-  { id: '1', icon: 'people', title: 'Pessoal' },
-  { id: '2', icon: 'calendar-today', title: 'Calendário', },
-  { id: '3', icon: 'info', title: 'Informações internas'},
-  { id: '4', icon: 'map', title: 'Mapa',},
-  { id: '5', icon: 'description', title: 'Documentação' },
+  { id: '1', icon: 'info', title: 'Informações' }, 
+  { id: '2', icon: 'calendar-today', title: 'Calendário' },
+  { id: '3', icon: 'people', title: 'Pessoal' }, 
+  { id: '4', icon: 'map', title: 'Mapa' },
+  { id: '5', icon: 'description', title: 'Doc' },
   { id: '6', icon: 'timer', title: 'Cronômetro', isNew: true },
 ];
 
@@ -36,7 +36,13 @@ const Home = () => {
   };
 
   const handleClockPress = () => {
-    navigation.navigate('Clock');  // Navigate to Clock screen
+    navigation.navigate('Clock'); 
+  };
+  const handleInfoPress = () => {
+    navigation.navigate('Info'); 
+  };
+  const handleDocPress = () => {
+    navigation.navigate('Doc'); 
   };
 
   const renderItem = ({ item }) => (
@@ -44,7 +50,9 @@ const Home = () => {
       style={styles.card} 
       onPress={item.title === 'Mapa' ? handleMapPress : 
                item.title === 'Calendário' ? handleCalendarPress : 
-               item.title === 'Cronômetro' ? handleClockPress : null} 
+               item.title === 'Cronômetro' ? handleClockPress : 
+               item.title === 'Pessoal' ? handleInfoPress :
+               item.title === 'Documentação' ? handleDocPress :null} 
     >
       <MaterialIcons name={item.icon} size={64} color="#333" />
       <Text style={styles.cardText}>{item.title}</Text>
