@@ -7,36 +7,28 @@ const data = [
   { id: '1', icon: 'build', title: 'Obras' },
   { id: '2', icon: 'people', title: 'Funcionários' },
   { id: '3', icon: 'map', title: 'Mapa' },
-  { id: '4', icon: 'description', title: 'Documentação' },
-  { id: '5', icon: 'timer', title: 'Cronômetro', isNew: true },
-  { id: '6', icon: 'add-box', title: 'Cadastro de Obras' },
+  { id: '4', icon: 'event', title: 'Calendário' },
+  { id: '5', icon: 'description', title: 'Documentação' },
+  { id: '6', icon: 'timer', title: 'Cronômetro', isNew: true },
+  { id: '7', icon: 'add', title: 'Cadastro de Obras' },
 ];
 
 const Home = () => {
   const navigation = useNavigation();
 
-  const handleLogout = () => {
-    Alert.alert(
-      'Confirmar Logout',
-      'Você tem certeza que deseja deslogar?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        { text: 'Deslogar', onPress: () => navigation.navigate('Login') },
-      ],
-      { cancelable: true }
-    );
-  };
-
   const handlePress = (title) => {
     switch (title) {
       case 'Obras':
-        // Navegação para a página de Obras
+        navigation.navigate('Works');
         break;
       case 'Funcionários':
-        navigation.navigate('Workers'); // Ajuste o nome da rota se necessário
+        navigation.navigate('Workers');
         break;
       case 'Mapa':
         navigation.navigate('Map');
+        break;
+      case 'Calendário':
+        navigation.navigate('Calendar');
         break;
       case 'Documentação':
         navigation.navigate('Documentation');
@@ -45,11 +37,23 @@ const Home = () => {
         navigation.navigate('Clock');
         break;
       case 'Cadastro de Obras':
-        // Navegação para a página de Cadastro de Obras
+        navigation.navigate('CadastroObras');
         break;
       default:
         break;
     }
+  };
+
+  const handleLogout = () => {
+    Alert.alert(
+      'Deseja realmente deslogar?',
+      '',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Logout', onPress: () => console.log('Deslogado!') }, // Aqui você pode adicionar a navegação para a tela de Login
+      ],
+      { cancelable: true }
+    );
   };
 
   const renderItem = ({ item }) => (
@@ -69,7 +73,6 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Bem-vindo usuário</Text>
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -89,14 +92,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#F9F9F9',
-    justifyContent: 'space-between',
-  },
-  header: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    color: '#333',
-    padding: 40,
+    justifyContent: 'flex-start',
   },
   grid: {
     justifyContent: 'center',
@@ -139,10 +135,10 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     backgroundColor: '#ff4d4d',
-    paddingVertical: 12,
+    paddingVertical: 16,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 32,
+    marginVertical: 16,
   },
   logoutButtonText: {
     color: '#fff',

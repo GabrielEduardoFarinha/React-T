@@ -33,7 +33,10 @@
     "@react-native-async-storage/async-storage": "1.23.1",
     "react-native-circular-progress-indicator": "*",
     "react-native-reanimated": "~3.10.1",
-    "react-native-svg": "15.2.0"
+    "react-native-svg": "15.2.0",
+    "react-native-fs": "*",
+    "react-native-pdf": "*",
+    "react-native-blob-util": "^0.13.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

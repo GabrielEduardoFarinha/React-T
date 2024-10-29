@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, TextInput, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Button, TextInput, Alert, StyleSheet } from 'react-native';
 
 const ClockScreen = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -32,7 +32,7 @@ const ClockScreen = () => {
 
   useEffect(() => {
     if (alarmSet && parseInt(alarmHour) === currentTime.getHours() && parseInt(alarmMinute) === currentTime.getMinutes()) {
-    alert("Hora do show porra!");
+      Alert.alert("Alarme", "Hora do show!");
       setAlarmSet(false);
     }
   }, [currentTime, alarmHour, alarmMinute, alarmSet]);
@@ -75,9 +75,9 @@ const ClockScreen = () => {
   const handleSetAlarm = () => {
     if (alarmHour && alarmMinute) {
       setAlarmSet(true);
-    alert('Alarm Set', `Alarm set for ${alarmHour}:${alarmMinute}`);
+      Alert.alert('Alarme Definido', `Alarme definido para ${alarmHour}:${alarmMinute}`);
     } else {
-    alert('Invalid Input', 'Please set valid hour and minute for the alarm.');
+      Alert.alert('Entrada Inválida', 'Por favor, defina uma hora e minuto válidos para o alarme.');
     }
   };
 
@@ -85,7 +85,7 @@ const ClockScreen = () => {
     if (timerDuration > 0) {
       setTimerRunning(true);
     } else {
-      alert('Invalid Input', 'Please set a valid timer duration.');
+      Alert.alert('Entrada Inválida', 'Por favor, defina uma duração válida para o timer.');
     }
   };
 
@@ -98,53 +98,53 @@ const ClockScreen = () => {
     <View style={styles.container}>
       {/* Clock */}
       <View style={styles.clockContainer}>
-        <Text style={styles.header}>Current Time</Text>
+        <Text style={styles.header}>Hora Atual</Text>
         <Text style={styles.currentTime}>{formatTime(currentTime)}</Text>
       </View>
 
       {/* Stopwatch */}
       <View style={styles.stopwatchContainer}>
-        <Text style={styles.header}>Stopwatch</Text>
+        <Text style={styles.header}>Cronômetro</Text>
         <Text style={styles.stopwatchTime}>{formatStopwatchTime(stopwatchTime)}</Text>
         <View style={styles.stopwatchButtons}>
-          <Button title={stopwatchRunning ? "Pause" : "Start"} onPress={() => setStopwatchRunning(!stopwatchRunning)} />
-          <Button title="Reset" onPress={() => { setStopwatchTime(0); setStopwatchRunning(false); }} />
+          <Button title={stopwatchRunning ? "Pausar" : "Iniciar"} onPress={() => setStopwatchRunning(!stopwatchRunning)} />
+          <Button title="Resetar" onPress={() => { setStopwatchTime(0); setStopwatchRunning(false); }} />
         </View>
       </View>
 
       {/* Alarm */}
       <View style={styles.alarmContainer}>
-        <Text style={styles.header}>Set Alarm</Text>
+        <Text style={styles.header}>Definir Alarme</Text>
         <TextInput
-          placeholder="Hour (24-hour format)"
+          placeholder="Hora (formato 24h)"
           keyboardType="numeric"
           value={alarmHour}
           onChangeText={setAlarmHour}
           style={styles.input}
         />
         <TextInput
-          placeholder="Minute"
+          placeholder="Minuto"
           keyboardType="numeric"
           value={alarmMinute}
           onChangeText={setAlarmMinute}
           style={styles.input}
         />
-        <Button title="Set Alarm" onPress={handleSetAlarm} />
+        <Button title="Definir Alarme" onPress={handleSetAlarm} />
       </View>
 
       {/* Timer */}
       <View style={styles.timerContainer}>
         <Text style={styles.header}>Timer</Text>
         <TextInput
-          placeholder="Set Timer (seconds)"
+          placeholder="Definir Timer (segundos)"
           keyboardType="numeric"
           value={timerDuration.toString()}
           onChangeText={text => setTimerDuration(parseInt(text) || 0)}
           style={styles.input}
         />
         <View style={styles.timerButtons}>
-          <Button title="Start Timer" onPress={handleStartTimer} />
-          <Button title="Reset Timer" onPress={handleResetTimer} />
+          <Button title="Iniciar Timer" onPress={handleStartTimer} />
+          <Button title="Resetar Timer" onPress={handleResetTimer} />
         </View>
         <Text style={styles.timerDisplay}>{formatTimerDuration(timerDuration)}</Text>
       </View>
@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
   currentTime: {
     fontSize: 48,
     fontWeight: 'bold',
+    color: '#333',
   },
   stopwatchContainer: {
     alignItems: 'center',
@@ -173,6 +174,7 @@ const styles = StyleSheet.create({
   stopwatchTime: {
     fontSize: 36,
     fontWeight: 'bold',
+    color: '#333',
   },
   stopwatchButtons: {
     flexDirection: 'row',
@@ -190,6 +192,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#333',
   },
   input: {
     borderBottomWidth: 1,
@@ -197,6 +200,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 10,
     fontSize: 16,
+    backgroundColor: '#fff',
+    borderRadius: 5,
   },
   timerButtons: {
     flexDirection: 'row',
@@ -208,6 +213,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: 'bold',
     marginTop: 10,
+    color: '#333',
   },
 });
 

@@ -6,11 +6,10 @@ import Home from './paginas/Home';
 import CalendarScreen from './paginas/CalendarScreen';
 import MapScreen from './paginas/MapScreen';
 import ClockScreen from './paginas/ClockScreen';
-import Tarefas from './paginas/Tarefas';
 import Doc from './paginas/Doc';
-import Works from './paginas/Works'; // Página para "Obras"
-import Workers from './paginas/Workers'; // Página para "Funcionários"
-import CadastroObras from './paginas/CadastroObras'; // Página para "Cadastro de Obras"
+import Works from './paginas/Works'; 
+import Workers from './paginas/Workers'; 
+import CadastroObras from './paginas/CadastroObras'; 
 
 const Stack = createStackNavigator();
 
@@ -26,7 +25,7 @@ const App = () => {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{ headerShown: true, title: 'Home' }}
+          options={{ headerShown: true, title: 'P&G' }}
         />
         <Stack.Screen
           name="Works"
@@ -52,11 +51,6 @@ const App = () => {
           name="Clock"
           component={ClockScreen}
           options={{ headerShown: true, title: 'Clock' }}
-        />
-        <Stack.Screen
-          name="Tarefas"
-          component={Tarefas}
-          options={{ headerShown: false, title: 'Tarefas' }}
         />
         <Stack.Screen
           name="Doc"
