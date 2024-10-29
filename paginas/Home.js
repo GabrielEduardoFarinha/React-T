@@ -4,12 +4,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 
 const data = [
-  { id: '1', icon: 'info', title: 'Informações' }, 
-  { id: '2', icon: 'calendar-today', title: 'Calendário' },
-  { id: '3', icon: 'people', title: 'Pessoal' }, 
-  { id: '4', icon: 'map', title: 'Mapa' },
-  { id: '5', icon: 'description', title: 'Doc' },
-  { id: '6', icon: 'timer', title: 'Cronômetro', isNew: true },
+  { id: '1', icon: 'build', title: 'Obras' },
+  { id: '2', icon: 'people', title: 'Funcionários' },
+  { id: '3', icon: 'map', title: 'Mapa' },
+  { id: '4', icon: 'description', title: 'Documentação' },
+  { id: '5', icon: 'timer', title: 'Cronômetro', isNew: true },
+  { id: '6', icon: 'add-box', title: 'Cadastro de Obras' },
 ];
 
 const Home = () => {
@@ -27,32 +27,35 @@ const Home = () => {
     );
   };
 
-  const handleMapPress = () => {
-    navigation.navigate('Map');
-  };
-
-  const handleCalendarPress = () => {
-    navigation.navigate('Calendar');
-  };
-
-  const handleClockPress = () => {
-    navigation.navigate('Clock'); 
-  };
-  const handleInfoPress = () => {
-    navigation.navigate('Info'); 
-  };
-  const handleDocPress = () => {
-    navigation.navigate('Doc'); 
+  const handlePress = (title) => {
+    switch (title) {
+      case 'Obras':
+        // Navegação para a página de Obras
+        break;
+      case 'Funcionários':
+        navigation.navigate('Workers'); // Ajuste o nome da rota se necessário
+        break;
+      case 'Mapa':
+        navigation.navigate('Map');
+        break;
+      case 'Documentação':
+        navigation.navigate('Documentation');
+        break;
+      case 'Cronômetro':
+        navigation.navigate('Clock');
+        break;
+      case 'Cadastro de Obras':
+        // Navegação para a página de Cadastro de Obras
+        break;
+      default:
+        break;
+    }
   };
 
   const renderItem = ({ item }) => (
     <TouchableOpacity 
       style={styles.card} 
-      onPress={item.title === 'Mapa' ? handleMapPress : 
-               item.title === 'Calendário' ? handleCalendarPress : 
-               item.title === 'Cronômetro' ? handleClockPress : 
-               item.title === 'Pessoal' ? handleInfoPress :
-               item.title === 'Documentação' ? handleDocPress :null} 
+      onPress={() => handlePress(item.title)}
     >
       <MaterialIcons name={item.icon} size={64} color="#333" />
       <Text style={styles.cardText}>{item.title}</Text>
@@ -86,14 +89,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#F9F9F9',
-    justifyContent: 'space-between', 
+    justifyContent: 'space-between',
   },
   header: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 16,
     color: '#333',
-    padding: 40
+    padding: 40,
   },
   grid: {
     justifyContent: 'center',
