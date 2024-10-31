@@ -1,85 +1,30 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   StyleSheet,
   Text,
   Button,
   Alert,
-  TextInput,
   SafeAreaView,
   View,
   TouchableOpacity,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useEndereco } from '../hooks/useEnderecos';
+import { Input } from '../components/Input';
+import { useObra } from '../database/useObra';
+import { fetchCoordinates } from '../utils/fetchCoord';
 import axios from 'axios';
 
-const fetchCoordinates = async (address) => {
-  const encodedAddress = encodeURIComponent(address);
-  const response = await axios.get(
-    `https://nominatim.openstreetmap.org/search?q=${encodedAddress}&format=json&addressdetails=1`
-  );
-
-  if (response.data.length > 0) {
-    const location = response.data[0];
-    return {
-      latitude: parseFloat(location.lat),
-      longitude: parseFloat(location.lon),
-    };
-  } else {
-    console.error('Endereço não encontrado');
-    return null;
-  }
-};
-
-const CadastroEndereco = () => {
+const CadastroObras = () => {
   const [data, setData] = useState(new Date());
   const [dataString, setDataString] = useState('');
   const [showPicker, setShowPicker] = useState(false);
-  const { saveEnderecos } = useEndereco();
   const [cep, setCep] = useState('');
-  const [address, setAddress] = useState(null);
-  const [numero, setNumero] = useState(''); // Campo para número do prédio/casa
-  const [apartamento, setApartamento] = useState(''); // Campo para apartamento
-  const [nomeObra, setNomeObra] = useState(''); // Campo para nome da obra
-
-  const handleAddEndereco = async () => {
-    if (!dataString || !address || !numero || !nomeObra) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos obrigatórios.');
-      return;
-    }
-
-    const fullAddress = `${address.logradouro}, ${address.localidade}, ${address.uf}`;
-    const coordinates = await fetchCoordinates(fullAddress);
-
-    if (!coordinates) {
-      Alert.alert('Erro', 'Não foi possível encontrar as coordenadas do endereço.');
-      return;
-    }
-
-    const newEndereco = {
-      data: dataString,
-      logradouro: address.logradouro,
-      localidade: address.localidade,
-      uf: address.uf,
-      numero, // Inclui número do prédio/casa
-      apartamento, // Inclui apartamento
-      nomeObra, // Inclui nome da obra
-      latitude: coordinates.latitude,
-      longitude: coordinates.longitude,
-    };
-
-    saveEnderecos(newEndereco);
-    Alert.alert('Sucesso', 'Endereço cadastrado com sucesso!');
-
-    // Limpa os campos após o cadastro
-    setCep('');
-    setData(new Date());
-    setDataString('');
-    setAddress(null);
-    setNumero('');
-    setApartamento('');
-    setNomeObra(''); // Limpa o campo de nome da obra
-  };
+  const [fullAdress, setFullAdress] = useState({});
+  const [numero, setNumero] = useState('');
+  const [complemento, setComplemento] = useState('');
+  const [nome, setNome] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const { createObra } = useObra();
 
   const showDatepicker = () => {
     setShowPicker(true);
@@ -89,77 +34,136 @@ const CadastroEndereco = () => {
     const currentDate = selectedDate || data;
     setShowPicker(false);
     setData(currentDate);
-    setDataString(currentDate.toISOString().split('T')[0]);
+    setDataString(currentDate.toISOString().split('T')[0]); // Formato YYYY-MM-DD
   };
 
-  const fetchAddress = async () => {
+  const handleCep = async () => {
     try {
       const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-      if (!response.data.erro) {
-        setAddress(response.data);
-      } else {
-        alert('CEP inválido');
-      }
+      const adress = response.data;
+      const { lat, lon } = await fetchCoordinates(adress);
+      console.log(lat, lon);
+      const latitude = 0;
+      const longitude = 0;
+      setFullAdress({ ...adress, latitude, longitude });
     } catch (error) {
-      console.error(error);
+      Alert.alert('Error', error.message);
+    }
+  };
+
+  const handleDisableBtn = () => {
+    return !(cep && dataString && fullAdress && numero && nome && descricao);
+  };
+
+  const handleAddEndereco = async () => {
+    const obra = {
+      nome,
+      descricao,
+      data: dataString,
+      cep,
+      numero,
+      complemento,
+      cidade: fullAdress.localidade,
+      rua: fullAdress.logradouro,
+      bairro: fullAdress.bairro,
+      latitude: fullAdress.latitude,
+      longitude: fullAdress.longitude,
+    };
+    console.log(obra);
+    try {
+      const { insertedRow } = await createObra(obra);
+      Alert.alert('Sucesso', `Obra criada`);
+    } catch (error) {
+      Alert.alert(error);
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Cadastro de Endereço</Text>
-      
-      <TextInput
-        placeholder="Nome da Obra"
-        value={nomeObra}
-        onChangeText={setNomeObra}
-        style={styles.input}
-      />
-
-      <TouchableOpacity style={styles.dateButton} onPress={showDatepicker}>
-        <Text style={styles.dateButtonText}>
-          {dataString ? `Data: ${dataString}` : 'Selecionar Data'}
-        </Text>
-      </TouchableOpacity>
-      {showPicker && (
-        <DateTimePicker
-          value={data}
-          mode="date"
-          is24Hour={true}
-          display="default"
-          onChange={onChangeDate}
+      <View>
+        <Input
+          placeholder={'Nome da obra'}
+          value={nome}
+          onChangeText={setNome}
+          placeholderTextColor="#000" // Placeholder preto
         />
-      )}
-      <Text style={styles.dateText}>Data selecionada: {dataString}</Text>
-      <TextInput
-        placeholder="Digite o CEP"
-        value={cep}
-        onChangeText={setCep}
-        keyboardType="numeric"
-        style={styles.input}
-      />
-      <Button title="Buscar Endereço" onPress={fetchAddress} color="#007BFF" />
-      {address && (
-        <View style={styles.addressContainer}>
-          <Text style={styles.addressText}>Rua: {address.logradouro}</Text>
-          <Text style={styles.addressText}>Cidade: {address.localidade}</Text>
-          <Text style={styles.addressText}>Estado: {address.uf}</Text>
+        <Input
+          placeholder={'Descrição da Obra'}
+          value={descricao}
+          onChangeText={setDescricao}
+          placeholderTextColor="#000" // Placeholder preto
+        />
+      </View>
+      <View>
+        <Text style={styles.dateText}>Data selecionada: {dataString}</Text>
+        <TouchableOpacity style={styles.dateButton} onPress={showDatepicker}>
+          <Text style={styles.dateButtonText}>
+            {dataString ? `Data: ${dataString}` : 'Selecionar Data'}
+          </Text>
+        </TouchableOpacity>
+        {showPicker && (
+          <DateTimePicker
+            value={data}
+            mode="date"
+            is24Hour={true}
+            display="default"
+            onChange={onChangeDate}
+          />
+        )}
+      </View>
+      <View style={styles.cepContainer}>
+        <Input
+          placeholder="Digite o CEP"
+          value={cep}
+          onChangeText={setCep}
+          keyboardType="numeric"
+          placeholderTextColor="#000" // Placeholder preto
+        />
+        <View style={{ display: 'flex', gap: 5 }}>
+          <Input
+            placeholder="Rua"
+            value={fullAdress.logradouro}
+            onChangeText={(text) => {
+              const prev = { ...fullAdress };
+              prev.logradouro = text;
+              setFullAdress(prev);
+            }}
+            placeholderTextColor="#000" // Placeholder preto
+          />
+          <Input
+            placeholder="Bairro"
+            value={fullAdress.bairro}
+            onChangeText={(text) => {
+              const prev = { ...fullAdress };
+              prev.bairro = text;
+              setFullAdress(prev);
+            }}
+            placeholderTextColor="#000" // Placeholder preto
+          />
+          <Input
+            placeholder="Número"
+            value={numero}
+            onChangeText={setNumero}
+            keyboardType="numeric"
+            placeholderTextColor="#000" // Placeholder preto
+          />
+          <Input
+            placeholder="Complemento"
+            value={complemento}
+            onChangeText={setComplemento}
+            placeholderTextColor="#000" // Placeholder preto
+          />
         </View>
-      )}
-      <TextInput
-        placeholder="Número do Prédio/Casa"
-        value={numero}
-        onChangeText={setNumero}
-        keyboardType="numeric"
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Apartamento (opcional)"
-        value={apartamento}
-        onChangeText={setApartamento}
-        style={styles.input}
-      />
-      <TouchableOpacity style={styles.submitButton} onPress={handleAddEndereco}>
+        <Button title="Buscar Endereço" onPress={handleCep} />
+      </View>
+      <TouchableOpacity
+        style={[
+          styles.submitButton,
+          handleDisableBtn() && styles.submitButtonDisabled,
+        ]}
+        onPress={handleAddEndereco}
+        disabled={handleDisableBtn()}>
         <Text style={styles.submitButtonText}>Cadastrar Endereço</Text>
       </TouchableOpacity>
     </SafeAreaView>
@@ -179,6 +183,10 @@ const styles = StyleSheet.create({
     color: '#333',
     textAlign: 'center',
   },
+  cepContainer: {
+    flex: 1,
+    gap: 15,
+  },
   dateButton: {
     backgroundColor: '#007BFF',
     padding: 15,
@@ -193,25 +201,6 @@ const styles = StyleSheet.create({
   dateText: {
     fontSize: 16,
     marginBottom: 10,
-    color: '#555',
-  },
-  input: {
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    backgroundColor: '#fff',
-  },
-  addressContainer: {
-    marginTop: 10,
-    padding: 10,
-    backgroundColor: '#e9ecef',
-    borderRadius: 8,
-  },
-  addressText: {
-    fontSize: 16,
     color: '#333',
   },
   submitButton: {
@@ -220,6 +209,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 20,
+    alignSelf: 'flex-end',
+    width: '100%',
+  },
+  submitButtonDisabled: {
+    backgroundColor: '#1e7e34',
   },
   submitButtonText: {
     color: '#fff',
@@ -228,4 +222,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CadastroEndereco;
+export default CadastroObras;
