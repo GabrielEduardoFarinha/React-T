@@ -107,8 +107,9 @@ const CadastroObras = () => {
             value={data}
             mode="date"
             is24Hour={true}
-            display="default"
+            display="spinner"
             onChange={onChangeDate}
+            style={styles.dateTimePicker} // Estilo para centralizar
           />
         )}
       </View>
@@ -120,6 +121,10 @@ const CadastroObras = () => {
           keyboardType="numeric"
           placeholderTextColor="#000" // Placeholder preto
         />
+        
+        {/* Botão movido para cima */}
+        <Button title="Buscar Endereço" onPress={handleCep} />
+
         <View style={{ display: 'flex', gap: 5 }}>
           <Input
             placeholder="Rua"
@@ -155,8 +160,8 @@ const CadastroObras = () => {
             placeholderTextColor="#000" // Placeholder preto
           />
         </View>
-        <Button title="Buscar Endereço" onPress={handleCep} />
       </View>
+
       <TouchableOpacity
         style={[
           styles.submitButton,
@@ -193,6 +198,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 10,
     alignItems: 'center',
+    alignSelf: 'center', // Centralizando o botão
   },
   dateButtonText: {
     color: '#fff',
@@ -215,10 +221,9 @@ const styles = StyleSheet.create({
   submitButtonDisabled: {
     backgroundColor: '#1e7e34',
   },
-  submitButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+  dateTimePicker: {
+    backgroundColor: '#000', // Fundo do DateTimePicker para preto
+    color: '#fff', // Texto em branco
   },
 });
 
