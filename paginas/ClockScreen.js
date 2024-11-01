@@ -44,7 +44,7 @@ const ClockScreen = () => {
         setTimerDuration(prev => {
           if (prev <= 1) {
             clearInterval(timerInterval);
-            Alert.alert("Timer", "Time's up!");
+            Alert.alert("O tempo acabou!");
             setTimerRunning(false);
             return 0;
           }
@@ -85,7 +85,7 @@ const ClockScreen = () => {
     if (timerDuration > 0) {
       setTimerRunning(true);
     } else {
-      Alert.alert('Entrada Inválida', 'Por favor, defina uma duração válida para o timer.');
+      Alert.alert('Entrada Inválida', 'Por favor, defina uma duração válida para o contador.');
     }
   };
 
@@ -117,6 +117,8 @@ const ClockScreen = () => {
         <Text style={styles.header}>Definir Alarme</Text>
         <TextInput
           placeholder="Hora (formato 24h)"
+          placeholderTextColor="#000"
+          returnKeyType="done"
           keyboardType="numeric"
           value={alarmHour}
           onChangeText={setAlarmHour}
@@ -124,7 +126,9 @@ const ClockScreen = () => {
         />
         <TextInput
           placeholder="Minuto"
+          placeholderTextColor="#000"
           keyboardType="numeric"
+          returnKeyType="done"
           value={alarmMinute}
           onChangeText={setAlarmMinute}
           style={styles.input}
@@ -134,17 +138,19 @@ const ClockScreen = () => {
 
       {/* Timer */}
       <View style={styles.timerContainer}>
-        <Text style={styles.header}>Timer</Text>
+        <Text style={styles.header}>Contagem regressiva</Text>
         <TextInput
-          placeholder="Definir Timer (segundos)"
+          placeholder="Definir contagem regressiva (segundos)"
+          placeholderTextColor="#000"
           keyboardType="numeric"
+          returnKeyType="done"
           value={timerDuration.toString()}
-          onChangeText={text => setTimerDuration(parseInt(text) || 0)}
+          onChangeText={text => setTimerDuration(parseInt(text))}
           style={styles.input}
         />
         <View style={styles.timerButtons}>
-          <Button title="Iniciar Timer" onPress={handleStartTimer} />
-          <Button title="Resetar Timer" onPress={handleResetTimer} />
+          <Button title="Iniciar contagem " onPress={handleStartTimer} />
+          <Button title="Resetar contagem" onPress={handleResetTimer} />
         </View>
         <Text style={styles.timerDisplay}>{formatTimerDuration(timerDuration)}</Text>
       </View>
