@@ -1,43 +1,30 @@
-import { useCallback } from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  FlatList,
-  Button,
-} from 'react-native';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { useEndereco } from '../hooks/useEnderecos';
-
+import { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, FlatList } from 'react-native';
+import { useObra } from '../database/useObra';
+import { useObraFuncionario } from '../database/useObraFuncionario';
+import { Obra } from '../components/Obra';
 export default function Tarefas() {
-  const navigation = useNavigation();
-  const { enderecos, loadEnderecos, deleteEndereco } = useEndereco();
-
-  useFocusEffect(
-    useCallback(() => {
-      loadEnderecos();
-    }, [loadEnderecos])
-  );
+  const [obras, setObras] = useState([]);
+  const { list } = useObra();
+  const { getAll } = useObraFuncionario();
+  const getObras = async () => {
+      const { result } = await list();
+      setObras(result);
+      await getAll();
+    };
+  useEffect(() => {
+    getObras();
+  },[]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Obras Cadastradas</Text>
       <View style={styles.containerTarefas}>
         <FlatList
-          data={enderecos}
-          horizontal
+          data={obras}
           showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <View key={item.id} style={styles.card}>
-              <Text style={styles.cardName}>{item.nomePersonalizado}</Text>
-              <Text style={styles.cardDate}>{item.data}</Text>
-              <Button
-                title="Apagar"
-                onPress={() => deleteEndereco(item.id)}
-                color="#e74c3c"
-              />
-            </View>
-          )}
+          style={{ alignItems: 'center' }}
+          renderItem={({ item }) => <Obra obra={item} reload={getObras}/>}
         />
       </View>
     </View>
@@ -48,9 +35,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f2f2f2',
-    paddingTop: 50,
-    paddingLeft: 20,
-    paddingRight: 20,
+    padding: 20,
   },
   title: {
     fontSize: 24,
@@ -62,31 +47,6 @@ const styles = StyleSheet.create({
   containerTarefas: {
     flex: 1,
     width: '100%',
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 10,
-    marginVertical: 10,
-    marginHorizontal: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-    width: 200, 
-    height: 100, 
     justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cardName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 5,
-  },
-  cardDate: {
-    fontSize: 14,
-    color: '#888',
   },
 });

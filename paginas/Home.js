@@ -1,47 +1,35 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  Alert,
+} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 
 const data = [
-  { id: '1', icon: 'build', title: 'Obras' },
-  { id: '2', icon: 'people', title: 'Funcionários' },
-  { id: '3', icon: 'map', title: 'Mapa' },
-  { id: '4', icon: 'event', title: 'Calendário' },
-  { id: '5', icon: 'description', title: 'Documentação' },
-  { id: '6', icon: 'timer', title: 'Cronômetro', isNew: true },
-  { id: '7', icon: 'add', title: 'Cadastro de Obras' },
+  { id: '1', icon: 'build', title: 'Obras', route: 'Works' },
+  { id: '2', icon: 'people', title: 'Funcionários', route: 'Workers' },
+  { id: '3', icon: 'map', title: 'Mapa', route: 'Map' },
+  { id: '4', icon: 'event', title: 'Calendário', route: 'Calendar' },
+  {
+    id: '5',
+    icon: 'description',
+    title: 'Documentação',
+    route: 'Documentation',
+  },
+  { id: '6', icon: 'timer', title: 'Cronômetro', isNew: true, route: 'Clock' },
+  { id: '7', icon: 'add', title: 'Cadastro de Obras', route: 'CadastroObras' },
 ];
 
 const Home = () => {
   const navigation = useNavigation();
 
-  const handlePress = (title) => {
-    switch (title) {
-      case 'Obras':
-        navigation.navigate('Works');
-        break;
-      case 'Funcionários':
-        navigation.navigate('Workers');
-        break;
-      case 'Mapa':
-        navigation.navigate('Map');
-        break;
-      case 'Calendário':
-        navigation.navigate('Calendar');
-        break;
-      case 'Documentação':
-        navigation.navigate('Documentation');
-        break;
-      case 'Cronômetro':
-        navigation.navigate('Clock');
-        break;
-      case 'Cadastro de Obras':
-        navigation.navigate('CadastroObras');
-        break;
-      default:
-        break;
-    }
+  const handlePress = (route) => {
+    navigation.navigate(route);
   };
 
   const handleLogout = () => {
@@ -57,10 +45,9 @@ const Home = () => {
   };
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity 
-      style={styles.card} 
-      onPress={() => handlePress(item.title)}
-    >
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => handlePress(item.route)}>
       <MaterialIcons name={item.icon} size={64} color="#333" />
       <Text style={styles.cardText}>{item.title}</Text>
       {item.isNew && (

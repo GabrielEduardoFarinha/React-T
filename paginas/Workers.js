@@ -1,61 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Alert, FlatList } from 'react-native';
-
-const HomeScreen = () => {
+import {CadastarFuncionario} from '../components/CadastrarFuncionario'
+import {MostarFuncionarios} from '../components/MostarFuncionarios'
+import {DemitirFuncionario} from '../components/DemitirFuncionario'
+const Workers = () => {
   const [modalVisibleCadastro, setModalVisibleCadastro] = useState(false);
   const [modalVisibleMostrar, setModalVisibleMostrar] = useState(false);
   const [modalVisibleDemissao, setModalVisibleDemissao] = useState(false);
-  const [modalVisibleObra, setModalVisibleObra] = useState(false);
-  const [modalVisibleConfirmacaoExclusao, setModalVisibleConfirmacaoExclusao] = useState(false);
-  const [nome, setNome] = useState('');
-  const [profissao, setProfissao] = useState('');
-  const [salario, setSalario] = useState('');
-  const [selectedObra, setSelectedObra] = useState('');
-  const [funcionarios, setFuncionarios] = useState([]);
-  const [funcionarioSelecionado, setFuncionarioSelecionado] = useState(null);
-
-  const obras = [
-    { label: 'Obra 1', value: 'obra1' },
-    { label: 'Obra 2', value: 'obra2' },
-    { label: 'Obra 3', value: 'obra3' },
-  ];
-
-  const handleCadastro = () => {
-    if (nome && profissao && salario && selectedObra) {
-      setFuncionarios([...funcionarios, { nome, profissao, salario, obra: selectedObra }]);
-      Alert.alert('Cadastro realizado', `Funcionário: ${nome}`);
-      setNome('');
-      setProfissao('');
-      setSalario('');
-      setSelectedObra('');
-      setModalVisibleCadastro(false);
-    } else {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos.');
-    }
-  };
-
-  const handleMostrar = (funcionario) => {
-    Alert.alert(
-      'Detalhes do Funcionário',
-      `Nome: ${funcionario.nome}\nProfissão: ${funcionario.profissao}\nSalário: ${funcionario.salario}\nObra: ${funcionario.obra}`
-    );
-  };
-
-  const handleDemissao = (funcionario) => {
-    setFuncionarioSelecionado(funcionario);
-    setModalVisibleConfirmacaoExclusao(true);
-  };
-
-  const confirmDelete = () => {
-    if (funcionarioSelecionado) {
-      setFuncionarios(funcionarios.filter(funcionario => funcionario.nome !== funcionarioSelecionado.nome));
-      Alert.alert('Funcionário excluído', `Funcionário: ${funcionarioSelecionado.nome} foi demitido.`);
-      setFuncionarioSelecionado(null);
-    }
-    setModalVisibleConfirmacaoExclusao(false);
-    setModalVisibleDemissao(false);
-  };
-
+  
   return (
     <View style={styles.container}>
       <TouchableOpacity 
@@ -84,83 +36,7 @@ const HomeScreen = () => {
         visible={modalVisibleCadastro}
         onRequestClose={() => setModalVisibleCadastro(false)}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Cadastro de Funcionários</Text>
-            <TextInput 
-              placeholder="Nome"
-              value={nome}
-              onChangeText={setNome}
-              style={styles.input}
-              placeholderTextColor="#000" // Cor do texto do placeholder
-            />
-            <TextInput 
-              placeholder="Profissão"
-              value={profissao}
-              onChangeText={setProfissao}
-              style={styles.input}
-              placeholderTextColor="#000" // Cor do texto do placeholder
-            />
-            <TextInput 
-              placeholder="Salário"
-              value={salario}
-              onChangeText={setSalario}
-              keyboardType="numeric"
-              style={styles.input}
-              placeholderTextColor="#000" // Cor do texto do placeholder
-            />
-            <TouchableOpacity 
-              style={styles.input} 
-              onPress={() => setModalVisibleObra(true)}
-            >
-              <Text style={styles.inputText}>
-                {selectedObra ? `Obra Selecionada: ${selectedObra}` : 'Selecione uma Obra'}
-              </Text>
-            </TouchableOpacity>
-
-            {/* Modal para selecionar a obra */}
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={modalVisibleObra}
-              onRequestClose={() => setModalVisibleObra(false)}
-            >
-              <View style={styles.modalContainer}>
-                <View style={styles.modalContent}>
-                  <Text style={styles.modalTitle}>Selecione uma Obra</Text>
-                  <FlatList
-                    data={obras}
-                    keyExtractor={(item) => item.value}
-                    renderItem={({ item }) => (
-                      <TouchableOpacity onPress={() => {
-                        setSelectedObra(item.label);
-                        setModalVisibleObra(false);
-                      }}>
-                        <Text style={styles.obraText}>{item.label}</Text>
-                      </TouchableOpacity>
-                    )}
-                  />
-                  <TouchableOpacity 
-                    style={styles.closeButton} 
-                    onPress={() => setModalVisibleObra(false)}
-                  >
-                    <Text style={styles.buttonText}>Fechar</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modal>
-
-            <TouchableOpacity style={styles.greenButton} onPress={handleCadastro}>
-              <Text style={styles.buttonText}>Cadastrar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={styles.closeButton} 
-              onPress={() => setModalVisibleCadastro(false)}
-            >
-              <Text style={styles.buttonText}>Fechar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <CadastarFuncionario close={() => setModalVisibleCadastro(false)}/>
       </Modal>
 
       {/* Modal para Mostrar Funcionários */}
@@ -170,30 +46,7 @@ const HomeScreen = () => {
         visible={modalVisibleMostrar}
         onRequestClose={() => setModalVisibleMostrar(false)}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Funcionários Cadastrados</Text>
-            {funcionarios.length === 0 ? (
-              <Text>Nenhum funcionário cadastrado.</Text>
-            ) : (
-              <FlatList
-                data={funcionarios}
-                keyExtractor={(item) => item.nome}
-                renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => handleMostrar(item)}>
-                    <Text style={styles.funcionarioText}>{item.nome}</Text>
-                  </TouchableOpacity>
-                )}
-              />
-            )}
-            <TouchableOpacity 
-              style={styles.closeButton} 
-              onPress={() => setModalVisibleMostrar(false)}
-            >
-              <Text style={styles.buttonText}>Fechar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <MostarFuncionarios close={() => setModalVisibleMostrar(false)} />
       </Modal>
 
       {/* Modal para Demissão */}
@@ -203,55 +56,10 @@ const HomeScreen = () => {
         visible={modalVisibleDemissao}
         onRequestClose={() => setModalVisibleDemissao(false)}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Selecionar Funcionário para Demissão</Text>
-            {funcionarios.length === 0 ? (
-              <Text>Nenhum funcionário cadastrado.</Text>
-            ) : (
-              <FlatList
-                data={funcionarios}
-                keyExtractor={(item) => item.nome}
-                renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => handleDemissao(item)}>
-                    <Text style={styles.funcionarioText}>{item.nome}</Text>
-                  </TouchableOpacity>
-                )}
-              />
-            )}
-            <TouchableOpacity 
-              style={styles.closeButton} 
-              onPress={() => setModalVisibleDemissao(false)}
-            >
-              <Text style={styles.buttonText}>Fechar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <DemitirFuncionario close={() => setModalVisibleDemissao(false)} />
       </Modal>
 
-      {/* Modal de Confirmação de Exclusão */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisibleConfirmacaoExclusao}
-        onRequestClose={() => setModalVisibleConfirmacaoExclusao(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Confirmação de Demissão</Text>
-            <Text>Deseja excluir o funcionário {funcionarioSelecionado?.nome}?</Text>
-            <TouchableOpacity style={styles.confirmButton} onPress={confirmDelete}>
-              <Text style={styles.buttonText}>Excluir</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={styles.closeButton} 
-              onPress={() => setModalVisibleConfirmacaoExclusao(false)}
-            >
-              <Text style={styles.buttonText}>Cancelar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+     
     </View>
   );
 };
@@ -281,13 +89,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  greenButton: {
-    backgroundColor: '#28a745', // Cor verde
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginTop: 10,
-  },
+  
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -307,24 +109,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
   },
-  input: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 15,
-    color: '#000', // Cor do texto do input
-  },
-  inputText: {
-    fontSize: 16,
-    color: '#000', // Cor do texto do placeholder
-  },
-  obraText: {
-    padding: 10,
-    fontSize: 16,
-    color: '#007BFF',
-  },
+  
   funcionarioText: {
     padding: 10,
     fontSize: 16,
@@ -346,4 +131,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default Workers;

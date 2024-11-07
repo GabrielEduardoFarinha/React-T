@@ -27,7 +27,7 @@ const CadastroObras = () => {
   const { createObra } = useObra();
 
   const toggleDatepicker = () => {
-    setShowPicker(prev => !prev);
+    setShowPicker((prev) => !prev);
   };
 
   const onChangeDate = (event, selectedDate) => {
@@ -43,17 +43,24 @@ const CadastroObras = () => {
     try {
       const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
       const adress = response.data;
-      const { lat, lon } = await fetchCoordinates(adress);
-      const latitude = lat || 0; // Certifique-se de ter os valores corretos
-      const longitude = lon || 0;
+      const { latitude, longitude } = await fetchCoordinates(adress);
+      console.log(latitude, longitude);
       setFullAdress({ ...adress, latitude, longitude });
     } catch (error) {
       Alert.alert('Error', error.message);
     }
+
   };
 
   const handleDisableBtn = () => {
-    return !(cep && dataString && fullAdress.logradouro && numero && nome && descricao);
+    return !(
+      cep &&
+      dataString &&
+      fullAdress &&
+      numero &&
+      nome &&
+      descricao
+    );
   };
 
   const handleAddEndereco = async () => {
@@ -227,4 +234,3 @@ const styles = StyleSheet.create({
 });
 
 export default CadastroObras;
-

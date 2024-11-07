@@ -1,50 +1,36 @@
 import React, { useState, useCallback,useEffect } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { Agenda } from 'react-native-calendars';
-import { useEndereco } from '../hooks/useEnderecos';
-import {  useFocusEffect } from '@react-navigation/native';
-
+import {useObra} from '../database/useObra'
+import {CalendarItem} from '../components/CalendarItem'
 const CalendarScreen = () => {
-  const [items, setItems] = useState({});
-  const { enderecos, loadEnderecos } = useEndereco();
-  useFocusEffect(
-    useCallback(() => {
-      loadEnderecos();
-    }, [loadEnderecos])
-  );
-
+  const [enderecos, setEnderecos] = useState({});
+  const {list} =useObra();
+  
   useEffect(() => {
-    // Função para agrupar endereços por data
-    const groupedEnderecos = enderecos.reduce((acc, curr) => {
-      const { data, logradouro, uf,localidade } = curr;
-
-      // Se a data ainda não existir no acumulador, crie um array vazio para ela
-      if (!acc[data]) {
-        acc[data] = [];
-      }
-
-      // Adiciona o endereço ao array correspondente à data
-      acc[data].push({ logradouro, uf,localidade });
-      return acc;
-    }, {});
-
-    setItems(groupedEnderecos);
-    console.log(groupedEnderecos)
-  }, [enderecos]);
+    const load = async () =>{
+      const {result} = await list()
+      const groupedEnderecos = result.reduce((acc,curr)=>{
+        const {data} = curr;
+        if(!acc[data]) {
+          acc[data]=[];
+        }
+        acc[data].push(curr)
+        return acc;
+      },{})
+      setEnderecos(groupedEnderecos)
+    }
+    
+    load()
+  }, []);
 
   //https://www.npmjs.com/package/react-native-calendars/v/1.1286.0
   return (
     <View style={styles.container}>
       <Agenda
-        items={items}
+        items={enderecos}
         renderItem={(item, firstItemInDay) => {
-          return (
-            <View style={styles.item}>
-              <Text>{item.logradouro}</Text>
-              <Text>{item.uf}</Text>
-              <Text>{item.localidade}</Text>
-            </View>
-          );
+          return <CalendarItem item={item}/>
         }}
         renderEmptyDate={() => (
           <View style={styles.emptyDate}>

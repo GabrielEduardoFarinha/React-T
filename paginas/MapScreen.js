@@ -1,34 +1,34 @@
 import React, { useState, useCallback } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text,ActivityIndicator } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useFocusEffect } from '@react-navigation/native';
-import { useEndereco } from '../hooks/useEnderecos';
+import { useObra } from '../database/useObra';
 
 const MapScreen = () => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [markers, setMarkers] = useState([]);
-  const { enderecos, loadEnderecos } = useEndereco(); // Usando o hook customizado para gerenciar endereços
+  const { list } = useObra();
 
-  // Função para carregar endereços do AsyncStorage
   const loadAddressesWithCoordinates = useCallback(async () => {
     try {
-      await loadEnderecos(); // Carrega os endereços do AsyncStorage
-
-      const validMarkers = enderecos
+      const { result } = await list();
+      
+      const validMarkers = result
         .filter((address) => address.latitude && address.longitude) // Filtra endereços com coordenadas válidas
         .map((address) => ({
           latitude: address.latitude,
           longitude: address.longitude,
-          title: `${address.logradouro}, ${address.localidade}, ${address.uf}`,
+          title: `${address.rua}, ${address.bairro}, ${address.cidade}`,
         }));
+      
 
       setMarkers(validMarkers); // Atualiza os marcadores no estado
     } catch (error) {
       console.error('Erro ao carregar endereços do AsyncStorage', error);
     }
-  }, [enderecos, loadEnderecos]);
+  }, []);
 
   const requestLocationAndLoadAddresses = useCallback(async () => {
     try {
@@ -51,7 +51,10 @@ const MapScreen = () => {
       // Carrega endereços do AsyncStorage e atualiza os marcadores
       await loadAddressesWithCoordinates();
     } catch (error) {
-      console.error('Erro ao solicitar localização ou carregar endereços:', error);
+      console.error(
+        'Erro ao solicitar localização ou carregar endereços:',
+        error
+      );
       setErrorMsg('Ocorreu um erro ao carregar a localização ou endereços.');
     }
   }, [loadAddressesWithCoordinates]);
@@ -68,8 +71,7 @@ const MapScreen = () => {
         <MapView
           style={styles.map}
           initialRegion={location}
-          showsUserLocation={true}
-        >
+          showsUserLocation={true}>
           <Marker coordinate={location} title="Minha Localização" />
           {/* Exibe os marcadores no mapa */}
           {markers.map((marker, index) => (
@@ -84,7 +86,10 @@ const MapScreen = () => {
           ))}
         </MapView>
       ) : (
-        <Text>{errorMsg ? errorMsg : 'Carregando localização...'}</Text>
+        <View style={{justifyContent: 'center', alignItems: 'center',flex:1}}>
+        
+        <ActivityIndicator size="large" color="#0000ff" style={styles.customSize} />
+        </View>
       )}
     </View>
   );
@@ -98,6 +103,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  customSize: {
+    transform: [{ scale: 2.5 }],
+  }
 });
 
 export default MapScreen;
