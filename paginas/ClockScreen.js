@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, TextInput, Alert, StyleSheet } from 'react-native';
+import { View, Text, Button, TextInput, Alert, StyleSheet, Vibration } from 'react-native';
 
 const ClockScreen = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -44,6 +44,7 @@ const ClockScreen = () => {
         setTimerDuration(prev => {
           if (prev <= 1) {
             clearInterval(timerInterval);
+            Vibration.vibrate([500, 500, 500]);  // Vibração: 500ms, pausa de 500ms, e 500ms de vibração
             Alert.alert("O tempo acabou!");
             setTimerRunning(false);
             return 0;
