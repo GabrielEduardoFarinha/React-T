@@ -4,6 +4,8 @@ export async function createTables(database: SQLiteDatabase) {
     // await database.execAsync('DROP TABLE IF EXISTS Obra')
     // await database.execAsync('DROP TABLE IF EXISTS Funcionarios')
     // await database.execAsync('DROP TABLE IF EXISTS Funcionario_Obra')
+    // await database.execAsync('DROP TABLE IF EXISTS Documento_Obra_Obra')
+    // await database.execAsync('DROP TABLE IF EXISTS Documentos')
 
     await database.execAsync(`
     CREATE TABLE IF NOT EXISTS Obra (
@@ -31,11 +33,28 @@ export async function createTables(database: SQLiteDatabase) {
     );
   `);
     await database.execAsync(`
+    CREATE TABLE IF NOT EXISTS Documentos (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT,
+      tipo TEXT,
+      descricao TEXT
+    );
+  `);
+    await database.execAsync(`
     CREATE TABLE IF NOT EXISTS Funcionario_Obra (
       funcionario_id INTEGER NOT NULL,
       obra_id INTEGER NOT NULL,
       PRIMARY KEY (funcionario_id, obra_id),
       FOREIGN KEY (funcionario_id) REFERENCES Funcionarios(id) ON DELETE CASCADE,
+      FOREIGN KEY (obra_id) REFERENCES Obra(id) ON DELETE CASCADE
+    );
+  `);
+    await database.execAsync(`
+    CREATE TABLE IF NOT EXISTS Documento_Obra (
+      documento_id INTEGER NOT NULL,
+      obra_id INTEGER NOT NULL,
+      PRIMARY KEY (documento_id, obra_id),
+      FOREIGN KEY (documento_id) REFERENCES Documentos(id) ON DELETE CASCADE,
       FOREIGN KEY (obra_id) REFERENCES Obra(id) ON DELETE CASCADE
     );
   `);

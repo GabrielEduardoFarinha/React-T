@@ -37,6 +37,7 @@ export function MostarFuncionarios({ close }) {
       try {
         const { result } = await useFuncionarios.list();
         setFuncionarios(result);
+        console.log(result)
       } catch (error) {
         Alert.alert('Erro', error.message);
       }

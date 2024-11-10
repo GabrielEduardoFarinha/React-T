@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   Alert,
+  SafeAreaView
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
@@ -19,9 +20,9 @@ const data = [
     id: '5',
     icon: 'description',
     title: 'Documentação',
-    route: 'Documentation',
+    route: 'Doc',
   },
-  { id: '6', icon: 'timer', title: 'Cronômetro', isNew: true, route: 'Clock' },
+  { id: '6', icon: 'timer', title: 'Cronômetro', route: 'Clock' },
   { id: '7', icon: 'add', title: 'Cadastro de Obras', route: 'CadastroObras' },
 ];
 
@@ -38,7 +39,7 @@ const Home = () => {
       '',
       [
         { text: 'Cancelar', style: 'cancel' },
-        { text: 'Logout', onPress: () => console.log('Deslogado!') }, // Aqui você pode adicionar a navegação para a tela de Login
+        { text: 'Logout', onPress: () => navigation.navigate("Login") }, 
       ],
       { cancelable: true }
     );
@@ -59,7 +60,7 @@ const Home = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -70,14 +71,14 @@ const Home = () => {
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutButtonText}>Logout</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 20,
     backgroundColor: '#F9F9F9',
     justifyContent: 'flex-start',
   },

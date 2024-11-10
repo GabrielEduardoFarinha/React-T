@@ -18,7 +18,7 @@ const App = () => {
   return (
     <DatabaseProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="Login">
           <Stack.Screen
             name="Login"
             component={Login}
@@ -27,7 +27,7 @@ const App = () => {
           <Stack.Screen
             name="Home"
             component={Home}
-            options={{ headerShown: true, title: 'P&G' }}
+            options={{ headerShown: false, title: 'P&G' }}
           />
           <Stack.Screen
             name="Works"
@@ -57,7 +57,7 @@ const App = () => {
           <Stack.Screen
             name="Doc"
             component={Doc}
-            options={{ headerShown: false, title: 'Documentação' }}
+            options={{ headerShown: true, title: 'Documentação' }}
           />
           <Stack.Screen
             name="CadastroObras"

@@ -34,7 +34,7 @@ const Login = () => {
   return (
     <View style={styles.container}>
       <AssetExample />
-      <Text style={styles.title}>Aplicativo em branco para testes</Text>
+      <Text style={styles.title}>P&G obras e reformas lmtd.</Text>
       <Text style={styles.subtitle}>{currentDateTime}</Text>
 
       <View style={styles.inputGroup}>

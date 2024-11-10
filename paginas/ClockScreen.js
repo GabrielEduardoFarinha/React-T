@@ -44,6 +44,7 @@ const ClockScreen = () => {
         setTimerDuration(prev => {
           if (prev <= 1) {
             clearInterval(timerInterval);
+            // Vibrar
             Vibration.vibrate([500, 500, 500]);  // Vibração: 500ms, pausa de 500ms, e 500ms de vibração
             Alert.alert("O tempo acabou!");
             setTimerRunning(false);
