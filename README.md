@@ -1,25 +1,144 @@
-Projeto React Native:
-Este projeto é um aplicativo mobile desenvolvido em React Native. O projeto foi cuidadosamente estruturado para organizar componentes reutilizáveis, um banco de dados local e múltiplas telas que permitem gerenciar e visualizar dados relacionados a funcionários, obras, documentos e outras funcionalidades. A arquitetura do código foi desenhada para facilitar a manutenção e expansão do projeto, com módulos e pastas que segregam as funções do aplicativo.
+# React Native Project-EN
 
-O projeto possui uma estrutura de diretórios bem definida. Primeiramente, a pasta de Componentes (/components) contém todos os componentes reutilizáveis, como formulários de cadastro, modais e itens de calendário, que são comuns a diferentes partes do aplicativo. Na pasta Banco de Dados (/database), há provedores e hooks que permitem interações com o banco de dados local, onde é possível gerenciar as informações armazenadas. Já na pasta de Páginas (/paginas), estão as telas do aplicativo, como Home, Login, Obras e Funcionários, cada uma representada por um arquivo JS específico que define a estrutura e o comportamento da interface correspondente. Além disso, há uma pasta de Utils (/utils), que contém funções auxiliares para manipulação de dados, como chamadas de API para localização.
+This project is a mobile application developed in **React Native** for an engineering company, aiming to optimize the management of construction projects, teams, and schedules.
+## Project Structure
 
-Antes de iniciar o projeto, é necessário que o Node.js e o npm estejam instalados no sistema. Além disso, recomenda-se o uso do Expo CLI, que pode ser instalado com o comando npm install -g expo-cli, facilitando o desenvolvimento em ambientes React Native. Uma vez instalados esses pré-requisitos, é possível clonar o repositório e instalar as dependências do projeto com os seguintes comandos:
+The code architecture is designed to facilitate maintenance and expansion, with modules and folders that separate the application's functionalities:
 
-bash
-Copiar código
-git clone <url-do-repositorio>
-cd <nome-do-projeto>
-npm install
-Com o ambiente preparado, o projeto pode ser iniciado executando o comando expo start. Este comando abrirá o Expo Developer Tools, permitindo que você rode o aplicativo em um emulador ou em um dispositivo físico conectado.
+- **/components**: Contains all reusable components, such as registration forms, modals, and calendar items.
+- **/database**: Includes providers and hooks for interactions with the local database, where information is managed.
+- **/paginas**: Contains the application's screens, such as `Home`, `Login`, `Construction`, and `Employees`. Each screen is represented by a specific JS file.
+- **/utils**: Contains helper functions for data manipulation, such as API calls for location.
+- **/tests**: Includes automated tests that verify the correct rendering of the application's main screens.
 
-Para garantir que as telas principais do aplicativo estão sendo renderizadas corretamente, foi incluída uma estrutura de testes que utiliza o Jest e a React Native Testing Library. Esta estrutura permite verificar se os componentes são exibidos conforme o esperado. Os testes de renderização estão organizados na pasta __tests__. Cada arquivo nesta pasta se dedica a testar uma tela específica. Por exemplo, o arquivo Home.test.js verifica se a tela Home está sendo exibida corretamente, enquanto Workers.test.js testa a tela de Funcionários (Workers). Estes testes foram configurados para simplificar a validação da interface, oferecendo feedback imediato sobre eventuais problemas de renderização nas telas principais.
+## Pre requisites
 
-Para rodar os testes, certifique-se de que todas as dependências estão instaladas. Então, basta executar npm test. Este comando iniciará os testes automatizados e informará se as telas Home e Workers estão funcionando corretamente no que diz respeito à sua renderização.
+Before starting the project, ensure the following requirements are met:
 
-Em resumo, este projeto em React Native oferece uma base sólida para o desenvolvimento de aplicativos móveis modulares e de fácil manutenção. Com uma organização de pastas que separa claramente os componentes, banco de dados, páginas e utilitários, bem como uma estrutura de testes para garantir a qualidade da interface, ele está pronto para ser expandido e adaptado conforme as necessidades futuras.
+- **Node.js** and **npm** installed.
+- **Expo CLI** installed globally
+- **Attention** install all dependencies from package.json
 
+  ```bash
+  npm install -g expo-cli
+  ```
 
+## How to Run the Project
 
+1. Clone the repository:
 
+   ```bash
+   git clone <REPOSITORY_URL>
+   ```
 
+2. Navigate to the project folder:
 
+   ```bash
+   cd <FOLDER_NAME>
+   ```
+
+3. Install the dependencies:
+
+   ```bash
+   npm install
+   ```
+
+4. Start the project:
+
+   ```bash
+   expo start
+   ```
+
+This command will open **Expo Developer Tools**, allowing you to run the application on an emulator or connected physical device.
+
+## Testing Framework
+
+The project uses **Jest** and **React Native Testing Library** to ensure the main screens are rendered correctly. The tests are located in the `/tests` folder. Each file in this folder verifies a specific screen:
+
+- `Home.test.js`: Tests the Home screen.
+- `Workers.test.js`: Tests the Workers screen.
+
+### Running the Tests
+
+1. Ensure all dependencies are installed.
+
+2. Run the following command to start the automated tests:
+
+   ```bash
+   npm test
+   ```
+
+The command will provide immediate feedback on any rendering issues on the main screens.
+
+# Projeto React Native-PT/BR
+
+Este projeto é um aplicativo mobile desenvolvido em **React Native**, para uma empresa de engenharia, com o objetivo de otimizar a gestão de obras, equipes e cronogramas.
+
+## Estrutura do Projeto
+
+A arquitetura do código foi desenhada para facilitar a manutenção e expansão, com módulos e pastas que segregam as funções do aplicativo:
+
+- **/components**: Contém todos os componentes reutilizáveis, como formulários de cadastro, modais e itens de calendário.
+- **/database**: Inclui provedores e hooks para interações com o banco de dados local, onde as informações são gerenciadas.
+- **/paginas**: Contém as telas do aplicativo, como `Home`, `Login`, `Obras` e `Funcionários`. Cada tela é representada por um arquivo JS específico.
+- **/utils**: Contém funções auxiliares para manipulação de dados, como chamadas de API para localização.
+- **/tests**: Inclui os testes automatizados que verificam a renderização correta das telas principais do aplicativo.
+
+## Pré-requisitos
+
+Antes de iniciar o projeto, certifique-se de que os seguintes requisitos estejam atendidos:
+
+- **Node.js** e **npm** instalados.
+- **Expo CLI** instalado globalmente
+- **atenção** instale todas as dependencias do package.json
+
+  ```bash
+  npm install -g expo-cli
+  ```
+
+## Como Executar o Projeto
+
+1. Clone o repositório:
+
+   ```bash
+   git clone <URL_DO_REPOSITORIO>
+   ```
+
+2. Navegue até a pasta do projeto:
+
+   ```bash
+   cd <NOME_DA_PASTA>
+   ```
+
+3. Instale as dependências:
+
+   ```bash
+   npm install
+   ```
+
+4. Inicie o projeto:
+
+   ```bash
+   expo start
+   ```
+
+Este comando abrirá o **Expo Developer Tools**, permitindo que você execute o aplicativo em um emulador ou dispositivo físico conectado.
+
+## Estrutura de Testes
+
+O projeto utiliza o **Jest** e a **React Native Testing Library** para garantir que as telas principais sejam renderizadas corretamente. Os testes estão localizados na pasta `/tests`. Cada arquivo nesta pasta verifica uma tela específica:
+
+- `Home.test.js`: Testa a tela Home.
+- `Workers.test.js`: Testa a tela de Funcionários (Workers).
+
+### Executando os Testes
+
+1. Certifique-se de que todas as dependências estão instaladas.
+
+2. Execute o seguinte comando para iniciar os testes automatizados:
+
+   ```bash
+   npm test
+   ```
+
+O comando fornecerá feedback imediato sobre eventuais problemas de renderização nas telas principais.
